@@ -1,10 +1,17 @@
 import scrapy
+from scrapy_selenium import SeleniumRequest
 
 
 class NetkeibaSpider(scrapy.Spider):
     name = 'netkeiba'
-    allowed_domains = ['db.netkeiba.com']
-    start_urls = ['http://db.netkeiba.com/']
+
+    def start_requests(self):
+        yield SeleniumRequest(
+            url='https://db.netkeiba.com/?pid=race_search_detail',
+            wait_time=3,
+            callback=self.parse
+        )
 
     def parse(self, response):
-        pass
+        driver = response.meta['driver']
+        driver.save_screenshot('test.png')
