@@ -1,5 +1,6 @@
 import scrapy
 from scrapy_selenium import SeleniumRequest
+from scrapy.selector import Selector
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
@@ -48,4 +49,14 @@ class NetkeibaSpider(scrapy.Spider):
         search.click()
         sleep(1)
 
-        driver.save_screenshot('test.png')
+        race_url_elements = driver.find_elements(By.XPATH, '//tr[position()>1]//td[position()=5]/a')
+        urls = [i.get_attribute('href') for i in race_url_elements]
+        for url in urls:
+            driver.get(url)
+            html = driver.page_source
+            sel = Selector(text=html)
+            yield {
+                'Race Name': sel.xpath('//dd/h1/text()').get()
+            }
+
+        # driver.save_screenshot('test.png')
