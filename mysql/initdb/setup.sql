@@ -6,11 +6,7 @@ CREATE TABLE `races`
     `race_name`         varchar(45) NOT NULL ,
     `race_place`        varchar(45) NOT NULL ,
     `number_of_entries` int NOT NULL ,
-    `race_type`         varchar(45) NOT NULL ,
-    `distance`          int NOT NULL ,
-    `track_condition`   varchar(45) NOT NULL ,
-    `course`            varchar(45) NOT NULL ,
-    `starting_time`     varchar(45) NOT NULL ,
+    `race_state`        varchar(45) NOT NULL,
     `date`              date NOT NULL ,
 
     PRIMARY KEY (`id`)

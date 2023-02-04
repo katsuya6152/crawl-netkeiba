@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep
+from crawl_netkeiba.items import CrawlNetkeibaItem
 
 
 class NetkeibaSpider(scrapy.Spider):
@@ -83,11 +84,20 @@ class NetkeibaSpider(scrapy.Spider):
                 }
                 results.append(result)
                 last_rank = index
+
+            race_name = sel.xpath('//dd/h1/text()').get()
+            race_place = sel.xpath('//div[@class="race_head_inner"]/ul/li/a[@class="active"]/text()').get()
+            number_of_entries = last_rank
+            race_state = sel.xpath('//diary_snap_cut/span/text()').get()
+            date = sel.xpath('//div[@class="data_intro"]/p/text()').get()
+
             yield {
-                'Race Name': sel.xpath('//dd/h1/text()').get(),
-                'Race State': sel.xpath('//diary_snap_cut/span/text()').get(),
-                'Date': sel.xpath('//div[@class="data_intro"]/p/text()').get(),
-                'Race place': sel.xpath('//div[@class="race_head_inner"]/ul/li/a[@class="active"]/text()').get(),
-                'Number of Entries': last_rank,
+                'Race Name': race_name,
+                'Race place': race_place,
+                'Number of Entries': number_of_entries,
+                'Race State': race_state,
+                'Date': date,
                 'Result': results
             }
+
+            yield CrawlNetkeibaItem(race_name = race_name, race_place = race_place, number_of_entries = number_of_entries, race_state = race_state, date = date)
