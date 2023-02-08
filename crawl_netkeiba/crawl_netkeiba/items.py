@@ -7,6 +7,9 @@ import scrapy
 
 
 class CrawlNetkeibaItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    id = scrapy.Field()
+    race_name = scrapy.Field()
+    race_place = scrapy.Field()
+    number_of_entries = scrapy.Field()
+    race_state = scrapy.Field()
+    date = scrapy.Field()
