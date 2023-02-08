@@ -2,12 +2,12 @@
 
 CREATE TABLE `races`
 (
-    `id`                int NOT NULL ,
+    `id`                varchar(45) NOT NULL ,
     `race_name`         varchar(45) NOT NULL ,
     `race_place`        varchar(45) NOT NULL ,
     `number_of_entries` int NOT NULL ,
     `race_state`        varchar(45) NOT NULL,
-    `date`              date NOT NULL ,
+    `date`              varchar(45) NOT NULL ,
 
     PRIMARY KEY (`id`)
 );

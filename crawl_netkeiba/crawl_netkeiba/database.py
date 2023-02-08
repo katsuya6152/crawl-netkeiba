@@ -2,19 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-# import config
+from . import config
 
-# USER = config.DB_USER
-# PASSWORD = config.PASSWORD
-# HOST = config.HOST
-# DB_NAME= config.DATABASE
-USER = 'user'
-PASSWORD = 'passw0rd'
-HOST = 'localhost'
-DB_NAME= 'crawl_netkeiba_db'
-
-
-print(USER, PASSWORD, HOST, DB_NAME)
+USER = config.DB_USER
+PASSWORD = config.PASSWORD
+HOST = config.HOST
+DB_NAME= config.DATABASE
 
 ENGINE = create_engine(
     f'mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DB_NAME}',

@@ -42,10 +42,10 @@ class NetkeibaSpider(scrapy.Spider):
         check_distance_3200 = driver.find_element(By.XPATH, '//input[@id="check_kyori_3200"]')
         check_distance_3200.click()
         sleep(1)
-        # check_display = driver.find_element(By.XPATH, '//select[@name="list"]')
-        # select_100 = Select(check_display)
-        # select_100.select_by_value('100')
-        # sleep(1)
+        check_display = driver.find_element(By.XPATH, '//select[@name="list"]')
+        select_100 = Select(check_display)
+        select_100.select_by_value('100')
+        sleep(1)
         search = driver.find_element(By.XPATH, '//input[@value="検索"]')
         search.click()
         sleep(1)
@@ -59,8 +59,8 @@ class NetkeibaSpider(scrapy.Spider):
             tr_elements = sel.xpath('//table[@class="race_table_01 nk_tb_common"]/tbody/tr')
             results = []
             last_rank = 0
-            for index, tr in enumerate(tr_elements):
-                if index == 0:
+            for i, tr in enumerate(tr_elements):
+                if i == 0:
                     continue
                 
                 result = {
@@ -83,21 +83,23 @@ class NetkeibaSpider(scrapy.Spider):
                     'Prize': tr.xpath('./td[position()=21]/text()').get(),
                 }
                 results.append(result)
-                last_rank = index
+                last_rank = i
 
+            id = sel.xpath('substring(//ul[@class="race_place fc"]/li/a[@class="active"]/@href, 7, 12)').get()
             race_name = sel.xpath('//dd/h1/text()').get()
             race_place = sel.xpath('//div[@class="race_head_inner"]/ul/li/a[@class="active"]/text()').get()
             number_of_entries = last_rank
             race_state = sel.xpath('//diary_snap_cut/span/text()').get()
             date = sel.xpath('//div[@class="data_intro"]/p/text()').get()
 
-            yield {
-                'Race Name': race_name,
-                'Race place': race_place,
-                'Number of Entries': number_of_entries,
-                'Race State': race_state,
-                'Date': date,
-                'Result': results
-            }
+            # yield {
+            #     'id': id,
+            #     'Race Name': race_name,
+            #     'Race place': race_place,
+            #     'Number of Entries': number_of_entries,
+            #     'Race State': race_state,
+            #     'Date': date,
+            #     'Result': results
+            # }
 
-            yield CrawlNetkeibaItem(race_name = race_name, race_place = race_place, number_of_entries = number_of_entries, race_state = race_state, date = date)
+            yield CrawlNetkeibaItem(id = id, race_name = race_name, race_place = race_place, number_of_entries = number_of_entries, race_state = race_state, date = date)

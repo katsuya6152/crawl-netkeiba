@@ -12,14 +12,15 @@ from .race import Race
 
 class CrawlNetkeibaPipeline:
     def process_item(self, item, spider):
-        races = Race()
-        races.race_name = item['race_name']
-        races.race_place = item['race_place']
-        races.number_of_entries = item['number_of_entries']
-        races.race_state = item['race_state']
-        races.date = item['date']
-
-        session.add(races)
-        session.commit()
-
+        id_exists = session.query(Race).filter(Race.id==item['id']).first()
+        if(id_exists == None):
+            race = Race()
+            race.id = item['id']
+            race.race_name = item['race_name']
+            race.race_place = item['race_place']
+            race.number_of_entries = item['number_of_entries']
+            race.race_state = item['race_state']
+            race.date = item['date']
+            session.add(race)
+            session.commit()
         return item
