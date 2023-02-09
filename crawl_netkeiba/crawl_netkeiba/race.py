@@ -1,7 +1,6 @@
 
 import sys
-from sqlalchemy import Column, Integer, Text, DateTime, Sequence
-from sqlalchemy.sql.functions import current_timestamp
+from sqlalchemy import Column, Integer, Text
 from . database import ENGINE, Base
 
 
@@ -20,6 +19,28 @@ class Race(Base):
     # starting_time = Column('starting_time', Text)
     # created_at = Column(DateTime(timezone=True), nullable=False, server_default=current_timestamp())
     # updated_at = Column(DateTime(timezone=True), nullable=False, server_default=current_timestamp())
+
+class RaceResult(Base):
+    __tablename__ = 'race_results'
+    id = Column('id', Text)
+    horse_id = Column('horse_id', Text, primary_key=True)
+    rank = Column('rank', Text)
+    box = Column('box', Text)
+    horse_order = Column('horse_order', Text)
+    horse_name = Column('horse_name', Text)
+    sex_and_age = Column('sex_and_age', Text)
+    burden_weight = Column('burden_weight', Text)
+    jockey = Column('jockey', Text)
+    time = Column('time', Text)
+    difference = Column('difference', Text)
+    transit = Column('transit', Text)
+    climb = Column('climb', Text)
+    odds = Column('odds', Text)
+    popularity = Column('popularity', Text)
+    horse_weight = Column('horse_weight', Text)
+    horse_trainer = Column('horse_trainer', Text)
+    horse_owner = Column('horse_owner', Text)
+    prize = Column('prize', Text)
 
 def main(args):
     Base.metadata.create_all(bind=ENGINE)

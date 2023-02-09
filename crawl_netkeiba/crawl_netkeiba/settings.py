@@ -63,7 +63,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'crawl_netkeiba.pipelines.CrawlNetkeibaPipeline': 300,
+   'crawl_netkeiba.pipelines.GetRacePipeline': 300,
+   'crawl_netkeiba.pipelines.GetRaceResultPipeline': 301
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

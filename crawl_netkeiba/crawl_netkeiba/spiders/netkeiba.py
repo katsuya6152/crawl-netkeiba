@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep
-from crawl_netkeiba.items import CrawlNetkeibaItem
+from crawl_netkeiba.items import CrawlNetkeibaItem, CrawlRaceResultItem
 
 
 class NetkeibaSpider(scrapy.Spider):
@@ -57,49 +57,38 @@ class NetkeibaSpider(scrapy.Spider):
             html = driver.page_source
             sel = Selector(text=html)
             tr_elements = sel.xpath('//table[@class="race_table_01 nk_tb_common"]/tbody/tr')
-            results = []
-            last_rank = 0
-            for i, tr in enumerate(tr_elements):
-                if i == 0:
-                    continue
-                
-                result = {
-                    'Rank': tr.xpath('./td[position()=1]/text()').get(),
-                    'Box': tr.xpath('./td[position()=2]/span/text()').get(),
-                    'Horse order': tr.xpath('./td[position()=3]/text()').get(),
-                    'Horse name': tr.xpath('./td[position()=4]/a/text()').get(),
-                    'Sex and age': tr.xpath('./td[position()=5]/text()').get(),
-                    'Burden weight': tr.xpath('./td[position()=6]/text()').get(),
-                    'Jockey': tr.xpath('./td[position()=7]/a/text()').get(),
-                    'Time': tr.xpath('./td[position()=8]/text()').get(),
-                    'Difference': tr.xpath('./td[position()=9]/text()').get(),
-                    'Transit': tr.xpath('./td[position()=11]/text()').get(),
-                    'Climb': tr.xpath('./td[position()=12]/span/text()').get(),
-                    'Odds': tr.xpath('./td[position()=13]/text()').get(),
-                    'Popularity': tr.xpath('./td[position()=14]/span/text()').get(),
-                    'Horse weight': tr.xpath('./td[position()=15]/text()').get(),
-                    'Horse trainer': tr.xpath('./td[position()=19]/a/text()').get(),
-                    'Horse owner': tr.xpath('./td[position()=20]/a/text()').get(),
-                    'Prize': tr.xpath('./td[position()=21]/text()').get(),
-                }
-                results.append(result)
-                last_rank = i
-
             id = sel.xpath('substring(//ul[@class="race_place fc"]/li/a[@class="active"]/@href, 7, 12)').get()
-            race_name = sel.xpath('//dd/h1/text()').get()
-            race_place = sel.xpath('//div[@class="race_head_inner"]/ul/li/a[@class="active"]/text()').get()
-            number_of_entries = last_rank
-            race_state = sel.xpath('//diary_snap_cut/span/text()').get()
-            date = sel.xpath('//div[@class="data_intro"]/p/text()').get()
+            yield CrawlNetkeibaItem(
+                id = id, 
+                race_name = sel.xpath('//dd/h1/text()').get(), 
+                race_place = sel.xpath('//div[@class="race_head_inner"]/ul/li/a[@class="active"]/text()').get(), 
+                number_of_entries = len(tr_elements), 
+                race_state = sel.xpath('//diary_snap_cut/span/text()').get(), 
+                date = sel.xpath('//div[@class="data_intro"]/p/text()').get()
+            )
 
-            # yield {
-            #     'id': id,
-            #     'Race Name': race_name,
-            #     'Race place': race_place,
-            #     'Number of Entries': number_of_entries,
-            #     'Race State': race_state,
-            #     'Date': date,
-            #     'Result': results
-            # }
+            for index, tr in enumerate(tr_elements):
+                if index == 0:
+                    continue
 
-            yield CrawlNetkeibaItem(id = id, race_name = race_name, race_place = race_place, number_of_entries = number_of_entries, race_state = race_state, date = date)
+                yield CrawlRaceResultItem(
+                    id = id,
+                    horse_id = id + str(index).zfill(2),
+                    rank = tr.xpath('./td[position()=1]/text()').get(),
+                    box = tr.xpath('./td[position()=2]/span/text()').get(),
+                    horse_order = tr.xpath('./td[position()=3]/text()').get(),
+                    horse_name = tr.xpath('./td[position()=4]/a/text()').get(),
+                    sex_and_age = tr.xpath('./td[position()=5]/text()').get(),
+                    burden_weight = tr.xpath('./td[position()=6]/text()').get(),
+                    jockey = tr.xpath('./td[position()=7]/a/text()').get(),
+                    time = tr.xpath('./td[position()=8]/text()').get(),
+                    difference = tr.xpath('./td[position()=9]/text()').get(),
+                    transit = tr.xpath('./td[position()=11]/text()').get(),
+                    climb = tr.xpath('./td[position()=12]/span/text()').get(),
+                    odds = tr.xpath('./td[position()=13]/text()').get(),
+                    popularity = tr.xpath('./td[position()=14]/span/text()').get(),
+                    horse_weight = tr.xpath('./td[position()=15]/text()').get(),
+                    horse_trainer = tr.xpath('./td[position()=19]/a/text()').get(),
+                    horse_owner = tr.xpath('./td[position()=20]/a/text()').get(),
+                    prize = tr.xpath('./td[position()=21]/text()').get()
+                )
