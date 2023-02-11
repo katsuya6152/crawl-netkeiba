@@ -4,10 +4,10 @@ CREATE TABLE `races`
 (
     `id`                varchar(45) NOT NULL ,
     `race_name`         varchar(45) NOT NULL ,
-    `race_place`        varchar(45) NOT NULL ,
-    `number_of_entries` int NOT NULL ,
-    `race_state`        varchar(45) NOT NULL,
-    `date`              varchar(45) NOT NULL ,
+    `race_place`        varchar(45) NULL ,
+    `number_of_entries` int NULL ,
+    `race_state`        varchar(45) NULL,
+    `date`              varchar(45) NULL ,
 
     PRIMARY KEY (`id`)
 );
@@ -33,7 +33,7 @@ CREATE TABLE `race_results`
     `popularity`     varchar(45) NULL ,
     `horse_weight`   varchar(45) NULL ,
     `horse_trainer`  varchar(45) NULL ,
-    `horse_owner`    varchar(45) NULL ,
+    `horse_owner`    varchar(90) NULL ,
     `prize`          varchar(45) NULL ,
 
     PRIMARY KEY (`horse_id`),
