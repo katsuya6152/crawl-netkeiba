@@ -97,7 +97,7 @@ class NetkeibaSpider(scrapy.Spider):
                     )
                 driver.back()
             try:
-                next_page = driver.find_element(By.XPATH, '//div[@class="pager"]/a[text()="次"]')
+                next_page = driver.find_element(By.XPATH, '//*[@id="contents_liquid"]/div[2]/ul[1]/li[14]/a')
                 sleep(1)
                 next_page.send_keys(Keys.ENTER)
             except selenium.common.exceptions.NoSuchElementException:
